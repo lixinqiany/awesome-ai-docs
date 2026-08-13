@@ -8,6 +8,7 @@ A curated collection of technical analyses, architecture notes, and implementati
 
 - [LiteLLM](gateway/litellm/README.md)
   - [LiteLLM Autorouter: Technical Analysis](gateway/litellm/autorouter-technical-analysis.md)
+  - [LiteLLM Load Balancing: Technical Analysis](gateway/litellm/load-balancing-technical-analysis.md)
 
 ## Contributors
 
