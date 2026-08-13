@@ -176,19 +176,20 @@ The selector uses runtime state to make a best-effort decision. LiteLLM stores t
 
 The cache key determines the scope of a signal. Depending on the strategy, state may be keyed by model group, deployment ID, provider model, or time window. A `RoutingGroup` gives a set of model names its own strategy and arguments, but it does not imply that every runtime counter is keyed by the routing-group name. Shared Redis improves visibility across instances; provider responses and failure handling remain the final correctness checks.
 
-Health, cooldown, and budget are filters, not selection strategies. They remove deployments that should not be attempted before the active strategy ranks the remaining candidates. For a deployment $d$ in cooldown, the remaining set is:
+Health, cooldown, and budget are filters, not selection strategies. They remove deployments that should not be attempted before the active strategy ranks the remaining candidates. A deployment remains in the cooldown-filtered set exactly when it is in $C_{health}$ and its ID is not in $K_{cooldown}$:
 
 $$
-C_{cooldown}=
-\{d\in C_{health}\mid d.id\notin K_{cooldown}\}.
+d\in C_{cooldown}
+\Longleftrightarrow
+d\in C_{health}\ \land\ d.id\notin K_{cooldown}.
 $$
 
-Budget filtering applies the same principle to accumulated spend. If $S_k$ is the recorded spend for an applicable scope and $L_k$ is its limit, a deployment remains eligible only when:
+Budget filtering applies the same principle to accumulated spend. If $S_k$ is the recorded spend for an applicable scope and $L_k$ is its limit, a deployment remains eligible only when it satisfies every applicable limit:
 
 $$
-C_{budget}=
-\{d\in C_{before}\mid \forall k\in K(d,q),
- S_k<L_k\}.
+d\in C_{budget}
+\Longleftrightarrow
+d\in C_{before}\ \land\ \forall k\in K(d,q),\ S_k<L_k.
 $$
 
 These checks answer **whether a deployment may be used**. The selector answers **which eligible deployment is preferred**. A budget filter therefore does not choose the cheapest endpoint, and cooldown does not rank the healthy endpoints.
@@ -210,7 +211,7 @@ Some LiteLLM features choose the logical model group before ordinary deployment 
 $$
 m'=P(m,q,x),
 \qquad
-d^*=S_{s(m',q)}\left(C_{final}(m',q,x)\right).
+d^*=S_{s(m',q)}(C_{final}(m',q,x)).
 $$
 
 The two decisions have different meanings:
