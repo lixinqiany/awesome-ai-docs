@@ -8,4 +8,4 @@ This directory collects technical analyses and implementation notes about [LiteL
 
 ## Coverage
 
-The autorouter analysis covers complexity tiers, heuristic and LLM-based classification, keyword and semantic overrides, escalation keywords, adaptive routing, Thompson sampling, posterior updates, and the end-to-end routing flow.
+The autorouter analysis covers the architecture overview, complexity tiers, heuristic and LLM-based classification, keyword and semantic overrides, escalation keywords, adaptive routing, Thompson sampling, and posterior updates.
